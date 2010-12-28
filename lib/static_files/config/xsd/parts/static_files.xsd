@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:routing_1_0="http://agavi.org/agavi/config/parts/routing/1.0"
+	xmlns="http://company.com/projectname/config/parts/static_files/1.0"
+	targetNamespace="http://company.com/projectname/config/parts/static_files/1.0"
+	elementFormDefault="qualified"
+	version="$Id: static_files.xsd 4456 2010-03-21 19:11:45Z rendez $">
+
+	<xs:import namespace="http://agavi.org/agavi/config/parts/routing/1.0"
+	           schemaLocation="../../../../../libs/agavi/config/xsd/parts/routing.xsd" />
+	
+	<!-- Global Type Definitions -->
+
+	<xs:simpleType name="file_type">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="script" />
+			<xs:enumeration value="style" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="file_name">
+		<xs:restriction base="xs:token">
+			<xs:pattern value="[\S]*" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="output_type_list">
+		<xs:list itemType="xs:string" />
+	</xs:simpleType>
+
+	<xs:attributeGroup name="output_types">
+		<xs:attribute name="output_type" type="output_type_list" use="optional" />
+	</xs:attributeGroup>
+	
+	<xs:complexType name="file">
+		<xs:simpleContent>
+			<xs:extension base="file_name">
+				<xs:attribute name="name" type="routing_1_0:route_name" />
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+	
+	<xs:complexType name="files">
+		<xs:sequence>
+			<xs:element name="file" type="file"
+						minOccurs="0" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:group name="files">
+		<xs:choice>
+			<xs:element name="files" type="files"
+						minOccurs="0" />
+			<xs:element name="file" type="file"
+						minOccurs="0"  maxOccurs="unbounded" />
+		</xs:choice>
+	</xs:group>
+	
+	<xs:complexType name="filelist">
+		<xs:sequence maxOccurs="unbounded">
+			<xs:group ref="files" />
+		</xs:sequence>
+		<xs:attribute name="metatype" type="file_type" use="required" />
+	</xs:complexType>
+	
+	<xs:complexType name="routes">
+		<xs:sequence>
+			<xs:element name="route" type="route" maxOccurs="unbounded" />
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:group name="routes">
+		<xs:choice>
+			<xs:element name="routes" type="routes" maxOccurs="unbounded" />
+			<xs:element name="route" type="route" maxOccurs="unbounded" />
+		</xs:choice>
+	</xs:group>
+
+	<xs:complexType name="route">
+		<xs:sequence>
+			<xs:element name="filelist" type="filelist" minOccurs="1" maxOccurs="unbounded" />
+		</xs:sequence>
+		<!-- Values to be set on match -->
+		<xs:attribute name="name" type="routing_1_0:route_name" use="required" />
+		<xs:attributeGroup ref="output_types" />
+		<xs:anyAttribute namespace="##any" processContents="lax" />
+	</xs:complexType>
+	
+	<xs:group name="configuration">
+		<xs:sequence>
+			<xs:any namespace="##other" processContents="lax"
+			        minOccurs="0" maxOccurs="unbounded" />
+			<xs:group ref="routes" />
+		</xs:sequence>
+	</xs:group>
+	
+</xs:schema>

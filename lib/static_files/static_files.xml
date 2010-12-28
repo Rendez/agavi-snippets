@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ae:configurations xmlns:ae="http://agavi.org/agavi/config/global/envelope/1.0"
+	xmlns="http://company.com/projectname/config/parts/static_files/1.0" xmlns:xi="http://www.w3.org/2001/XInclude">
+	
+	<ae:sandbox>
+		<!-- projectname Core static files -->
+		<route id="core">
+			<!-- Screen 'core' styles -->
+			<filelist metatype="style">
+				<file>%com.project.stylesheet%/reset.css</file>
+				<file>%com.project.stylesheet%/typography.css</file>
+				<file>%com.project.stylesheet%/grid.css</file>
+				<file>%com.project.stylesheet%/forms.css</file>
+			</filelist>
+			<!-- Script 'core' participants -->
+			<filelist metatype="script">
+				<files>
+					<file name="mootools_core">%com.project.javascript%/mootools-core/mootools-1.2.4-core.js</file>
+					<file name="mootools_more">%com.project.javascript%/mootools-more/mootools-1.2.4.2-more.js</file>
+				</files>
+			</filelist>
+			<!-- Including core plugins, such as Cufon -->
+			<xi:include xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xmlns(sf=http://company.com/projectname/config/parts/static_files/1.0) xpointer(/ae:configurations/ae:sandbox/sf:route[@id='core_plugins']/sf:filelist)" />
+			
+			<filelist metatype="script">
+				<file name="site">%com.project.javascript%/base.js</file>
+			</filelist>
+		</route>
+		
+		<!-- Core Plugins -->
+		<route id="core_plugins">
+			<filelist metatype="script">
+				<files>
+					<file name="swfobject">%com.project.javascript%/swfobject.js</file>
+					<file name="cufon">%com.project.javascript%/cufon.js</file>
+				</files>
+			</filelist>
+		</route>
+	</ae:sandbox>
+	
+	<ae:configuration context="web" environment=".*">
+		<routes>
+			
+			<route name="*">
+				<xi:include xpointer="xmlns(ae=http://agavi.org/agavi/config/global/envelope/1.0) xmlns(sf=http://company.com/projectname/config/parts/static_files/1.0) xpointer(/ae:configurations/ae:sandbox/sf:route[@id='core']/*)" />
+			</route>
+			
+			<route name="index">
+				<filelist metatype="style">
+					<file>%com.project.stylesheet%splash.css</file>
+				</filelist>
+			</route>
+			
+			<route name="login">
+				<filelist metatype="script">
+					<file>%com.project.javascript%OAuthLogin.js</file>
+					<file>%com.project.javascript%Lightbox.js</file>
+				</filelist>
+			</route>
+			
+		</routes>
+	</ae:configuration>
+	
+	<ae:configuration context="web" environment="development.*">
+		<routes>
+			
+			<route name="*">
+				<filelist metatype="script">
+					<file>%com.project.javascript%AjaxDebugger.js</file>
+				</filelist>
+			</route>
+			
+		</routes>
+	</ae:configuration>
+
+</ae:configurations>
