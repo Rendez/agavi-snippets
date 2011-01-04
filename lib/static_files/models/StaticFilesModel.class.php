@@ -51,8 +51,7 @@ class StaticFilesModel extends AgaviModel implements AgaviISingletonModel
 		
 		$data = array();
 		// include the 'match-all' wildcard
-		$this->context->getRequest()->appendAttribute('matched_routes', '*', 'org.agavi.routing');
-		$matchedRoutes = $this->context->getRequest()->getAttribute('matched_routes', 'org.agavi.routing', array());
+		$matchedRoutes = array_merge($this->context->getRequest()->getAttribute('matched_routes', 'org.agavi.routing', array()), array('*'));
 
 		if(empty($data)) {
 			foreach($this->files as $routeName => $files) {

@@ -34,7 +34,7 @@ class StaticFilesConfigHandler extends AgaviXmlConfigHandler
 		// setting up our default namespace
 		$document->setDefaultNamespace(self::XML_NAMESPACE, 'static_files');
 		
-		$routing = AgaviContext::getInstance($this->context)->getRouting();
+		$routing = $this->context->getRouting();
 		
 		$data = array();
 
