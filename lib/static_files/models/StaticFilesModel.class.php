@@ -37,7 +37,6 @@ class StaticFilesModel extends AgaviModel implements AgaviISingletonModel
 			$cfg = AgaviConfig::get('core.config_dir') . '/static_files.xml';
 			$this->cacheName = AgaviConfigCache::checkConfig($cfg, $this->context->getName());
 			require $this->cacheName;
-			$this->build();
 		} catch(AgaviUnreadableException $e) {
 			throw new AgaviConfigurationException($e->getMessage());
 		}
